@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 
 import com.germanautolabs.weatherapp.WeatherApp;
 import com.germanautolabs.weatherapp.android.activities.MainActivity;
+import com.germanautolabs.weatherapp.android.components.connection.IURLConnection;
+import com.germanautolabs.weatherapp.android.components.connection.WeatherRequestAsyncTask;
 import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
@@ -32,6 +34,9 @@ public class MainService extends Service
 
     @Inject
     LocationSystem mLocationSystem;
+
+    @Inject
+    IURLConnection mURLConnection;
 
     @Nullable
     @Override
@@ -87,9 +92,20 @@ public class MainService extends Service
     }
 
     @Subscribe
-    public void onLocationSucess(LocationSystem.Event pEvent)
+    public void onLocationSuccess(LocationSystem.Event pEvent)
     {
-        this.mEventBus.post(new Event(EventType.LOCATION));
+        //this.mEventBus.post(new Event(EventType.LOCATION));
+        String url = "http://api.openweathermap.org/data/2.5/weather?" + "lat=" + pEvent.getLatitude() + "&" + "lon=" + pEvent.getLongitude() + "&appid=3ef15745554d9e2cefa574ca5d2dd19f";
+
+        this.mURLConnection.clearError();
+        WeatherRequestAsyncTask weatherRequestAsyncTask = new WeatherRequestAsyncTask(this.mURLConnection);
+        weatherRequestAsyncTask.execute(url);
+    }
+
+    @Subscribe
+    public void onWeatherDataSuccess(WeatherRequestAsyncTask.Event pEvent)
+    {
+        this.mEventBus.post(new Event(pEvent.getData()));
     }
 
     /**
@@ -98,18 +114,26 @@ public class MainService extends Service
     public enum EventType
     {
         VOICE_RECOGNITION,
-        LOCATION
+        LOCATION,
+        WEATHER_DATA
     }
 
     public class Event
     {
         private EventType mType;
         private List<String> mWordList;
+        private String mData;
 
         public Event(List<String> pWordList)
         {
             this.mWordList = pWordList;
             this.mType = EventType.VOICE_RECOGNITION;
+        }
+
+        public Event(String pData)
+        {
+            this.mData = pData;
+            this.mType = EventType.WEATHER_DATA;
         }
 
         public Event(EventType pType)

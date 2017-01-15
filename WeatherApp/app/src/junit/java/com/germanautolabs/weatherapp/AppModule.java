@@ -1,5 +1,7 @@
 package com.germanautolabs.weatherapp;
 
+import com.germanautolabs.weatherapp.android.components.connection.DefaultURLConnection;
+import com.germanautolabs.weatherapp.android.components.connection.IURLConnection;
 import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
@@ -38,5 +40,12 @@ public class AppModule
     public LocationSystem provideLocationSystem()
     {
         return Mockito.mock(LocationSystem.class);
+    }
+
+    @Provides
+    @Singleton
+    public IURLConnection provideURLConnection()
+    {
+        return Mockito.mock(DefaultURLConnection.class);
     }
 }

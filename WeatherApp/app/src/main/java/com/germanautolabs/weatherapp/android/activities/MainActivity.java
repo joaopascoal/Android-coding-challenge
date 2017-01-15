@@ -92,8 +92,11 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case LOCATION:
-                mVoiceBtn.setEnabled(true);
+                //mVoiceBtn.setEnabled(true);
                 break;
+
+            case WEATHER_DATA:
+                mVoiceBtn.setEnabled(true);
         }
     }
 
