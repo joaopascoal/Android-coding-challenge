@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case LOCATION_FOUND:
+                mHello.setText(getBaseContext().getString(R.string.label_you_are) + " " + pEvent.getCity() + ", " + pEvent.getCountry());
                 mVoiceBtn.setEnabled(true);
                 break;
         }

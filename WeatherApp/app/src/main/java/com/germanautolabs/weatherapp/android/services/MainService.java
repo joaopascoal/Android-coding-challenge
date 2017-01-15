@@ -110,7 +110,7 @@ public class MainService extends Service
     public void onWeatherDataSuccess(WeatherRequestAsyncTask.Event pEvent)
     {
         this.mLocationSystem.setWeatherData(pEvent.getData());
-        this.mEventBus.post(new Event());
+        this.mEventBus.post(new Event(this.mLocationSystem.getCity(), this.mLocationSystem.getCountryName()));
     }
 
     /**
@@ -127,6 +127,8 @@ public class MainService extends Service
         private EventType mType;
 
         private List<String> mDataList;
+        private String mCity;
+        private String mCountry;
 
         public Event(List<String> pDataList)
         {
@@ -134,8 +136,10 @@ public class MainService extends Service
             this.mType = EventType.VOICE_RECOGNITION;
         }
 
-        public Event()
+        public Event(String pCity, String pCountry)
         {
+            this.mCity = pCity;
+            this.mCountry = pCountry;
             this.mType = EventType.LOCATION_FOUND;
         }
 
@@ -147,6 +151,16 @@ public class MainService extends Service
         public List<String> getDataList()
         {
             return this.mDataList;
+        }
+
+        public String getCity()
+        {
+            return this.mCity;
+        }
+
+        public String getCountry()
+        {
+            return this.mCountry;
         }
     }
 }

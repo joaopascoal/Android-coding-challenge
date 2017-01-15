@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="filter_weather">météo</string>
+
+    <string name="label_you_are">Vous êtes à</string>
 </resources>
