@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="filter_weather">météo</string>
+    <string name="filter_temperature">temperature</string>
 
     <string name="label_greetings">Salut! Bienvenue au WeatherApp!</string>
     <string name="label_location">Recherche votre emplacement...</string>

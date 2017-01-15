@@ -26,11 +26,11 @@ import static org.mockito.Mockito.doReturn;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<MainActivity>
+public class WeatherRequestTest extends ActivityInstrumentationTestCase2<MainActivity>
 {
     private TestEnvironmentProvider mTestEnvironmentProvider;
 
-    public ExampleInstrumentedTest()
+    public WeatherRequestTest()
     {
         super(MainActivity.class);
     }
@@ -47,7 +47,7 @@ public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<Ma
     }
 
     @SmallTest
-    public void testBasic() throws Exception
+    public void testWeatherRequest() throws Exception
     {
         DefaultVoiceRecognition mockVoiceRecognition = (DefaultVoiceRecognition) this.mTestEnvironmentProvider.getMockedVoiceRecognition();
         LocationSystem mockLocationSystem = this.mTestEnvironmentProvider.getMockedLocationSystem();
@@ -75,16 +75,5 @@ public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<Ma
     public void tearDown() throws Exception
     {
         super.tearDown();
-    }
-
-    private String getListWord(List<String> pList)
-    {
-        String result = "";
-        for (String word : pList)
-        {
-            result += word + " ";
-        }
-
-        return result;
     }
 }

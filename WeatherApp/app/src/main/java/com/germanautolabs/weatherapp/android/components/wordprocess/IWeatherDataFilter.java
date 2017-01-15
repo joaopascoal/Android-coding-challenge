@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface IWeatherDataFilter
 {
-    List<String> processData(String rawData);
+    List<String> processData(String pRawData);
 }
