@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.hello_txt)
     TextView mHello;
 
+    @BindView(R.id.location_txt)
+    TextView mLocation;
+
     @BindView(R.id.voice_btn)
     Button mVoiceBtn;
 
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         if (this.mLocationSystem.isFindLocation())
         {
             mVoiceBtn.setEnabled(true);
+            this.setLocationText();
         }
 
         Intent serviceIntent = new Intent(this, MainService.class);
@@ -95,10 +99,15 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case LOCATION_FOUND:
-                mHello.setText(getBaseContext().getString(R.string.label_you_are) + " " + pEvent.getCity() + ", " + pEvent.getCountry());
+                this.setLocationText();
                 mVoiceBtn.setEnabled(true);
                 break;
         }
+    }
+
+    private void setLocationText()
+    {
+        mLocation.setText(getBaseContext().getString(R.string.label_you_are) + " " + mLocationSystem.getCity() + ", " + mLocationSystem.getCountryName());
     }
 
     /**

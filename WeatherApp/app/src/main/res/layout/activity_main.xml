@@ -16,7 +16,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Hello World!"/>
+        android:text="@string/label_greetings"/>
+
+    <TextView
+        android:text="@string/label_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hello_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:id="@+id/location_txt"/>
 
     <Button
         android:text="Voice"
