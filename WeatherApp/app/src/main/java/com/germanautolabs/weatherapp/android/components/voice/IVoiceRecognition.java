@@ -10,4 +10,6 @@ public interface IVoiceRecognition
     void start();
     void stop();
     void postEvent();
+
+    boolean isMock();
 }

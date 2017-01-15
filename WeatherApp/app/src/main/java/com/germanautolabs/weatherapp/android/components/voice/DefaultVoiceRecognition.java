@@ -36,19 +36,6 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
         this.init(context);
     }
 
-
-
-    public void init(Context pContext)
-    {
-        this.mWordsSpoken.clear();
-        this.mSpeech = SpeechRecognizer.createSpeechRecognizer(pContext);
-        this.mSpeech.setRecognitionListener(this);
-        this.mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,"voice.recognition.test");
-        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,5);
-    }
-
     public List<String> getWordsSpoken()
     {
         return this.mWordsSpoken;
@@ -78,9 +65,16 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
     @Override
     public void start()
     {
-        // TODO: Error treatment if the statement below is false
-        if (this.mSpeech != null && this.mRecognizerIntent != null)
-            this.mSpeech.startListening(this.mRecognizerIntent);
+        if (!isMock())
+        {
+            // TODO: Error treatment if the statement below is false
+            if (this.mSpeech != null && this.mRecognizerIntent != null)
+                this.mSpeech.startListening(this.mRecognizerIntent);
+        }
+        else
+        {
+            this.postEvent();
+        }
     }
 
     @Override
@@ -93,6 +87,12 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
     public void postEvent()
     {
         EventBus.getDefault().post(new Event(this.getWordsSpoken()));
+    }
+
+    @Override
+    public boolean isMock()
+    {
+        return false;
     }
 
     /**
