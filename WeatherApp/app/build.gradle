@@ -24,7 +24,7 @@ android {
             versionNameSuffix = "-junit"
         }
 
-        build {
+        dev {
             applicationIdSuffix = ".build"
             versionNameSuffix = "-build"
         }
