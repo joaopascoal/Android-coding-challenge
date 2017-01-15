@@ -3,6 +3,8 @@ package com.germanautolabs.weatherapp.android.components.location;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,6 +12,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Joao on 1/15/2017.
@@ -21,7 +27,11 @@ public class LocationSystem implements LocationListener
 
     private int mLatitude;
     private int mLongitude;
+    private String mCity;
+    private String mCountryName;
     private boolean mFindLocation;
+
+    private String mWeatherData;
 
     private Context mContext;
 
@@ -85,6 +95,26 @@ public class LocationSystem implements LocationListener
         return this.mFindLocation;
     }
 
+    public void setWeatherData(String pData)
+    {
+        this.mWeatherData = pData;
+    }
+
+    public String getWeatherData()
+    {
+        return this.mWeatherData;
+    }
+
+    public String getCity()
+    {
+        return this.mCity;
+    }
+
+    public String getCountryName()
+    {
+        return this.mCountryName;
+    }
+
     public void postEvent()
     {
         if (isFindLocation())
@@ -100,8 +130,25 @@ public class LocationSystem implements LocationListener
     {
         this.mLatitude = (int) Math.round(location.getLatitude());
         this.mLongitude = (int) Math.round(location.getLongitude());
-        this.mFindLocation = true;
 
+        Geocoder geoCoder = new Geocoder(this.mContext, Locale.getDefault());
+        try
+        {
+            List<Address> addressList = geoCoder.getFromLocation(this.mLatitude, this.mLongitude, 1);
+
+            if (addressList.size() > 0)
+            {
+                Address address = addressList.get(0);
+                this.mCity = address.getLocality();
+                this.mCountryName = address.getCountryName();
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        this.mFindLocation = true;
         this.postEvent();
     }
 

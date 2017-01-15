@@ -81,22 +81,22 @@ public class MainActivity extends AppCompatActivity
         switch (pEvent.getType())
         {
             case VOICE_RECOGNITION:
-                List<String> wordList = pEvent.getWordList();
-                String result = "";
-                for (String word : wordList)
+                List<String> dataList = pEvent.getDataList();
+
+                if (dataList.size() > 0)
                 {
-                    result += word + " ";
+                    String description = dataList.get(0);
+                    mHello.setText(description);
                 }
-
-                mHello.setText(result);
+                else
+                {
+                    mHello.setText("Fail!");
+                }
                 break;
 
-            case LOCATION:
-                //mVoiceBtn.setEnabled(true);
-                break;
-
-            case WEATHER_DATA:
+            case LOCATION_FOUND:
                 mVoiceBtn.setEnabled(true);
+                break;
         }
     }
 

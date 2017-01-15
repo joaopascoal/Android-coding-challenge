@@ -5,6 +5,9 @@ import com.germanautolabs.weatherapp.android.components.connection.IURLConnectio
 import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
+import com.germanautolabs.weatherapp.android.components.wordprocess.KeywordSystem;
+import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Description;
+import com.germanautolabs.weatherapp.android.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.mockito.Mockito;
@@ -47,5 +50,15 @@ public class AppModule
     public IURLConnection provideURLConnection()
     {
         return Mockito.mock(DefaultURLConnection.class);
+    }
+
+    @Provides
+    @Singleton
+    public KeywordSystem provideKeywordSystem()
+    {
+        KeywordSystem keywordSystem = new KeywordSystem();
+        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_weather), new OpenWeatherMap_Description());
+
+        return keywordSystem;
     }
 }

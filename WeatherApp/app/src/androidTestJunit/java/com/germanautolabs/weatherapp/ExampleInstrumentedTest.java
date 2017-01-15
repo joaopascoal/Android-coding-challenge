@@ -4,7 +4,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.germanautolabs.weatherapp.android.activities.MainActivity;
+import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
+import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Description;
+import com.germanautolabs.weatherapp.android.utils.JSONUtils;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +50,25 @@ public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<Ma
     public void testBasic() throws Exception
     {
         DefaultVoiceRecognition mockVoiceRecognition = (DefaultVoiceRecognition) this.mTestEnvironmentProvider.getMockedVoiceRecognition();
+        LocationSystem mockLocationSystem = this.mTestEnvironmentProvider.getMockedLocationSystem();
 
+        // Mock "weather" keyword
         ArrayList<String> list = new ArrayList<>();
         list.add("weather");
         list.add("leather");
-
         doReturn(list).when(mockVoiceRecognition).getWordsSpoken();
 
+        // Mock call to OpenWeatherAPI
+        String json = TestEnvironmentProvider.jsonFromAsset("weatherMockData.json");
+
+        // Mock "weather" filter recognizer
+        OpenWeatherMap_Description filter = new OpenWeatherMap_Description();
+        List<String> results = filter.processData(json);
+        doReturn(json).when(mockLocationSystem).getWeatherData();
+
+        // Test
         onView(withId(R.id.voice_btn)).perform(click());
-        onView(withId(R.id.hello_txt)).check(matches(withText(getListWord(list))));
+        onView(withId(R.id.hello_txt)).check(matches(withText(results.get(0))));
     }
 
     @Override

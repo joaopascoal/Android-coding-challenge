@@ -12,6 +12,7 @@ import com.germanautolabs.weatherapp.android.components.connection.WeatherReques
 import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
+import com.germanautolabs.weatherapp.android.components.wordprocess.KeywordSystem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +38,9 @@ public class MainService extends Service
 
     @Inject
     IURLConnection mURLConnection;
+
+    @Inject
+    KeywordSystem mKeywordSystem;
 
     @Nullable
     @Override
@@ -88,13 +92,13 @@ public class MainService extends Service
     @Subscribe
     public void onVoiceRecognitionSuccess(DefaultVoiceRecognition.Event pEvent)
     {
-        this.mEventBus.post(new Event(pEvent.getWordList()));
+        List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData(), this);
+        this.mEventBus.post(new Event(filteredData));
     }
 
     @Subscribe
     public void onLocationSuccess(LocationSystem.Event pEvent)
     {
-        //this.mEventBus.post(new Event(EventType.LOCATION));
         String url = "http://api.openweathermap.org/data/2.5/weather?" + "lat=" + pEvent.getLatitude() + "&" + "lon=" + pEvent.getLongitude() + "&appid=3ef15745554d9e2cefa574ca5d2dd19f";
 
         this.mURLConnection.clearError();
@@ -105,40 +109,34 @@ public class MainService extends Service
     @Subscribe
     public void onWeatherDataSuccess(WeatherRequestAsyncTask.Event pEvent)
     {
-        this.mEventBus.post(new Event(pEvent.getData()));
+        this.mLocationSystem.setWeatherData(pEvent.getData());
+        this.mEventBus.post(new Event());
     }
 
     /**
-     * Event class/enum
+     * Event class
      */
     public enum EventType
     {
         VOICE_RECOGNITION,
-        LOCATION,
-        WEATHER_DATA
+        LOCATION_FOUND
     }
 
     public class Event
     {
         private EventType mType;
-        private List<String> mWordList;
-        private String mData;
 
-        public Event(List<String> pWordList)
+        private List<String> mDataList;
+
+        public Event(List<String> pDataList)
         {
-            this.mWordList = pWordList;
+            this.mDataList = pDataList;
             this.mType = EventType.VOICE_RECOGNITION;
         }
 
-        public Event(String pData)
+        public Event()
         {
-            this.mData = pData;
-            this.mType = EventType.WEATHER_DATA;
-        }
-
-        public Event(EventType pType)
-        {
-            this.mType = pType;
+            this.mType = EventType.LOCATION_FOUND;
         }
 
         public EventType getType()
@@ -146,9 +144,9 @@ public class MainService extends Service
             return this.mType;
         }
 
-        public List<String> getWordList()
+        public List<String> getDataList()
         {
-            return this.mWordList;
+            return this.mDataList;
         }
     }
 }

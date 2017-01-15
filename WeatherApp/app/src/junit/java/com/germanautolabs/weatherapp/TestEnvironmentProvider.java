@@ -5,6 +5,9 @@ import android.app.Instrumentation;
 import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.inject.Inject;
 
 import static org.mockito.Mockito.doCallRealMethod;
@@ -61,5 +64,46 @@ public class TestEnvironmentProvider
     public IVoiceRecognition getMockedVoiceRecognition()
     {
         return this.mVoiceRecognition;
+    }
+
+    public LocationSystem getMockedLocationSystem()
+    {
+        return this.mLocationSystem;
+    }
+
+    public static String jsonFromAsset(String jsonFileName)
+    {
+        String json;
+        try
+        {
+            InputStream is = WeatherApp.getInstance().getAssets().open(jsonFileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex)
+        {
+            throw new RuntimeException();
+        }
+        return json;
+    }
+
+    public String jsonFromAssetForJunit(String jsonFileName)
+    {
+        String json;
+        try
+        {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("weatherMockData.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex)
+        {
+            throw new RuntimeException();
+        }
+        return json;
     }
 }

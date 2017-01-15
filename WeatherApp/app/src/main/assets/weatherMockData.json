@@ -1,0 +1,41 @@
+{
+  "coord":{
+    "lon":-34.86,
+    "lat":-8.01
+  },
+  "weather":[
+    {
+      "id":804,
+      "main":"Clouds",
+      "description":"overcast clouds",
+      "icon":"04n"
+    }
+  ],
+  "base":"stations",
+  "main":{
+    "temp":300.26,
+    "pressure":1021.77,
+    "humidity":100,
+    "temp_min":300.26,
+    "temp_max":300.26,
+    "sea_level":1023.76,
+    "grnd_level":1021.77
+  },
+  "wind":{
+    "speed":3.54,
+    "deg":89.5027
+  },
+  "clouds":{
+    "all":88
+  },
+  "dt":1484444998,
+  "sys":{
+    "message":0.0086,
+    "country":"BR",
+    "sunrise":1484467972,
+    "sunset":1484513102
+  },
+  "id":3393536,
+  "name":"Olinda",
+  "cod":200
+}
