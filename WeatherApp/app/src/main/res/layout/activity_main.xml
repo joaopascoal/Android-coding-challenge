@@ -12,7 +12,16 @@
     tools:context="com.germanautolabs.weatherapp.android.activities.MainActivity">
 
     <TextView
+        android:id="@+id/hello_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
+
+    <Button
+        android:text="Voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/voice_btn"/>
 </RelativeLayout>

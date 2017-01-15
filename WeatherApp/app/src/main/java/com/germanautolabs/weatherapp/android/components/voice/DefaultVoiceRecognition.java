@@ -8,6 +8,8 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
         this.init(context);
     }
 
+
+
     public void init(Context pContext)
     {
         this.mWordsSpoken.clear();
@@ -45,9 +49,32 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
         this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,5);
     }
 
+    public List<String> getWordsSpoken()
+    {
+        return this.mWordsSpoken;
+    }
+
     /**
      * Methods from IVoiceRecognition
      */
+    @Override
+    public void init(Object... params)
+    {
+        Context context;
+        if (params != null && params.length > 0)
+            context = (Context) params[0];
+        else
+            return;
+
+        this.mWordsSpoken.clear();
+        this.mSpeech = SpeechRecognizer.createSpeechRecognizer(context);
+        this.mSpeech.setRecognitionListener(this);
+        this.mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,"voice.recognition.test");
+        this.mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,5);
+    }
+
     @Override
     public void start()
     {
@@ -65,7 +92,7 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
     @Override
     public void postEvent()
     {
-
+        EventBus.getDefault().post(new Event(this.getWordsSpoken()));
     }
 
     /**
@@ -137,5 +164,32 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
     public void onEvent(int eventType, Bundle params)
     {
 
+    }
+
+    public class Event
+    {
+        private List<String> mWordList;
+        private int mError;
+
+        public Event(List<String> pList)
+        {
+            this.mWordList = pList;
+            this.mError = 0;
+        }
+
+        public Event(int pError)
+        {
+            this.mError = pError;
+        }
+
+        public int getErrorCode()
+        {
+            return this.mError;
+        }
+
+        public List<String> getWordList()
+        {
+            return this.mWordList;
+        }
     }
 }
