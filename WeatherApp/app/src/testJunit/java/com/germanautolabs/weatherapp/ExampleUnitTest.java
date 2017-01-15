@@ -1,6 +1,13 @@
 package com.germanautolabs.weatherapp;
 
+import com.germanautolabs.weatherapp.android.components.wordprocess.KeywordSystem;
+import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Description;
+
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +18,46 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest
 {
-    @Test
-    public void addition_isCorrect() throws Exception
+    private TestEnvironmentProvider mTestEnvironmentProvider;
+    private KeywordSystem mKeywordSystem;
+
+    @Before
+    public void init()
     {
-        assertEquals(4, 2 + 2);
+        mTestEnvironmentProvider = TestEnvironmentProvider.getInstance();
+
+        mKeywordSystem = new KeywordSystem();
+        mKeywordSystem.addFilter("weather", new OpenWeatherMap_Description());
+    }
+
+    @Test
+    public void filter_isCorrect() throws Exception
+    {
+        ArrayList<String> wordsRecognized = new ArrayList<>();
+        wordsRecognized.add("weather");
+        wordsRecognized.add("leather");
+        wordsRecognized.add("feather");
+
+        // Mock call to OpenWeatherAPI
+        String json = mTestEnvironmentProvider.jsonFromAssetForJunit("weatherMockData.json");
+        List<String> resultList = mKeywordSystem.getData(wordsRecognized, json);
+
+        assertEquals(1, resultList.size());
+        assertEquals("overcast clouds", resultList.get(0));
+    }
+
+    @Test
+    public void filter_isNotCorrect() throws Exception
+    {
+        ArrayList<String> wordsRecognized = new ArrayList<>();
+        wordsRecognized.add("star");
+        wordsRecognized.add("scar");
+        wordsRecognized.add("far");
+
+        // Mock call to OpenWeatherAPI
+        String json = mTestEnvironmentProvider.jsonFromAssetForJunit("weatherMockData.json");
+        List<String> resultList = mKeywordSystem.getData(wordsRecognized, json);
+
+        assertEquals(0, resultList.size());
     }
 }

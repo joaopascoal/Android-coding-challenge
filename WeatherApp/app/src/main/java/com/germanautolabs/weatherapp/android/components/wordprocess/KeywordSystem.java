@@ -27,7 +27,7 @@ public class KeywordSystem
         this.mKeywordList.add(pKeyWord);
     }
 
-    public List<String> getData(List<String> pWordsRecognized, String pRawData, Context pContext)
+    public List<String> getData(List<String> pWordsRecognized, String pRawData)
     {
         for (String recognizedWord : pWordsRecognized)
         {

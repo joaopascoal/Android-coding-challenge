@@ -28,10 +28,21 @@ public class TestEnvironmentProvider
 
     private static TestEnvironmentProvider instance;
 
+    public TestEnvironmentProvider() {}
+
     private TestEnvironmentProvider(Instrumentation instrumentation)
     {
         WeatherApp app = (WeatherApp) instrumentation.getTargetContext().getApplicationContext().getApplicationContext();
         app.getAppComponent().inject(this);
+    }
+
+    public static TestEnvironmentProvider getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new TestEnvironmentProvider();
+        }
+        return instance;
     }
 
     public static TestEnvironmentProvider getInstance(Instrumentation instrumentation)

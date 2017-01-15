@@ -92,7 +92,7 @@ public class MainService extends Service
     @Subscribe
     public void onVoiceRecognitionSuccess(DefaultVoiceRecognition.Event pEvent)
     {
-        List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData(), this);
+        List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData());
         this.mEventBus.post(new Event(filteredData));
     }
 
