@@ -17,6 +17,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        junit {
+            applicationIdSuffix = ".junit"
+            versionNameSuffix = "-junit"
+        }
+
+        build {
+            applicationIdSuffix = ".build"
+            versionNameSuffix = "-build"
+        }
+    }
+
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (variant.buildType.name.equals('release')
+                && names.contains("junit")) {
+            setIgnore(true)
+        }
+    }
 }
 
 dependencies {
