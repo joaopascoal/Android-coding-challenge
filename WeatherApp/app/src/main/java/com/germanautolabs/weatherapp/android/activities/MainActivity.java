@@ -1,5 +1,6 @@
 package com.germanautolabs.weatherapp.android.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import com.germanautolabs.weatherapp.R;
 import com.germanautolabs.weatherapp.WeatherApp;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
+import com.germanautolabs.weatherapp.android.services.MainService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,9 +29,6 @@ public class MainActivity extends AppCompatActivity
     @Inject
     EventBus mEventBus;
 
-    @Inject
-    IVoiceRecognition mVoiceRecognition;
-
     @BindView(R.id.hello_txt)
     TextView mHello;
 
@@ -45,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         ((WeatherApp) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
 
-        this.mVoiceRecognition.init(this);
+        Intent serviceIntent = new Intent(this, MainService.class);
+        startService(serviceIntent);
     }
 
     @Override
@@ -65,20 +65,47 @@ public class MainActivity extends AppCompatActivity
     @OnClick(R.id.voice_btn)
     public void onVoiceClick(Button button)
     {
-        mVoiceRecognition.start();
+        this.mEventBus.post(new Event(EventType.VOICE_RECOGNITION));
     }
 
     @Subscribe
-    public void onVoiceRecognitionSuccess(DefaultVoiceRecognition.Event pEvent)
+    public void onServiceEvent(MainService.Event pEvent)
     {
-        String words = "";
-
-        List<String> wordList = pEvent.getWordList();
-        for (String word : wordList)
+        switch (pEvent.getType())
         {
-            words += word + " ";
+            case VOICE_RECOGNITION:
+                List<String> wordList = pEvent.getWordList();
+                String result = "";
+                for (String word : wordList)
+                {
+                    result += word + " ";
+                }
+
+                mHello.setText(result);
+                break;
+        }
+    }
+
+    /**
+     * Event class/enum
+     */
+    public enum EventType
+    {
+        VOICE_RECOGNITION
+    }
+
+    public class Event
+    {
+        private EventType mType;
+
+        public Event(EventType pType)
+        {
+            this.mType = pType;
         }
 
-        mHello.setText(words);
+        public EventType getType()
+        {
+            return this.mType;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.germanautolabs.weatherapp;
 
 import com.germanautolabs.weatherapp.android.activities.MainActivity;
+import com.germanautolabs.weatherapp.android.services.MainService;
 
 import javax.inject.Singleton;
 
@@ -15,6 +16,7 @@ import dagger.Component;
 public interface AppComponent
 {
     void inject(MainActivity mainActivity);
+    void inject(MainService mainService);
     void inject(TestEnvironmentProvider testEnvironmentProvider);
 }
 
