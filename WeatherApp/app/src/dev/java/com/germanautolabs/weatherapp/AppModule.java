@@ -1,5 +1,8 @@
 package com.germanautolabs.weatherapp;
 
+import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
+import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
+
 import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Singleton;
@@ -19,5 +22,12 @@ public class AppModule
     public EventBus provideEventBus()
     {
         return EventBus.getDefault();
+    }
+
+    @Provides
+    @Singleton
+    public IVoiceRecognition provideVoiceRecognition()
+    {
+        return new DefaultVoiceRecognition();
     }
 }
