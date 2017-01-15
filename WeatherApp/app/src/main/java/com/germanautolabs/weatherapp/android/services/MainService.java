@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.germanautolabs.weatherapp.WeatherApp;
 import com.germanautolabs.weatherapp.android.activities.MainActivity;
+import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
 
@@ -28,6 +29,9 @@ public class MainService extends Service
 
     @Inject
     IVoiceRecognition mVoiceRecognition;
+
+    @Inject
+    LocationSystem mLocationSystem;
 
     @Nullable
     @Override
@@ -52,6 +56,10 @@ public class MainService extends Service
 
         // Speech
         this.mVoiceRecognition.init(this);
+
+        // Location
+        this.mLocationSystem.init(this);
+        this.mLocationSystem.start();
     }
 
     @Override
@@ -78,12 +86,19 @@ public class MainService extends Service
         this.mEventBus.post(new Event(pEvent.getWordList()));
     }
 
+    @Subscribe
+    public void onLocationSucess(LocationSystem.Event pEvent)
+    {
+        this.mEventBus.post(new Event(EventType.LOCATION));
+    }
+
     /**
      * Event class/enum
      */
     public enum EventType
     {
-        VOICE_RECOGNITION
+        VOICE_RECOGNITION,
+        LOCATION
     }
 
     public class Event
@@ -95,6 +110,11 @@ public class MainService extends Service
         {
             this.mWordList = pWordList;
             this.mType = EventType.VOICE_RECOGNITION;
+        }
+
+        public Event(EventType pType)
+        {
+            this.mType = pType;
         }
 
         public EventType getType()

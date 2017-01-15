@@ -1,5 +1,6 @@
 package com.germanautolabs.weatherapp;
 
+import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
 
@@ -29,5 +30,12 @@ public class AppModule
     public IVoiceRecognition provideVoiceRecognition()
     {
         return new DefaultVoiceRecognition();
+    }
+
+    @Provides
+    @Singleton
+    public LocationSystem provideLocationSystem()
+    {
+        return new LocationSystem();
     }
 }

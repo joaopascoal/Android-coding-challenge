@@ -8,8 +8,7 @@ import android.widget.TextView;
 
 import com.germanautolabs.weatherapp.R;
 import com.germanautolabs.weatherapp.WeatherApp;
-import com.germanautolabs.weatherapp.android.components.voice.DefaultVoiceRecognition;
-import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
+import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.services.MainService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +28,9 @@ public class MainActivity extends AppCompatActivity
     @Inject
     EventBus mEventBus;
 
+    @Inject
+    LocationSystem mLocationSystem;
+
     @BindView(R.id.hello_txt)
     TextView mHello;
 
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity
 
         ((WeatherApp) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
+
+        if (this.mLocationSystem.isFindLocation())
+        {
+            mVoiceBtn.setEnabled(true);
+        }
 
         Intent serviceIntent = new Intent(this, MainService.class);
         startService(serviceIntent);
@@ -82,6 +89,10 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 mHello.setText(result);
+                break;
+
+            case LOCATION:
+                mVoiceBtn.setEnabled(true);
                 break;
         }
     }

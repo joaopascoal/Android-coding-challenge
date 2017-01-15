@@ -2,6 +2,7 @@ package com.germanautolabs.weatherapp;
 
 import android.app.Instrumentation;
 
+import com.germanautolabs.weatherapp.android.components.location.LocationSystem;
 import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
 
 import javax.inject.Inject;
@@ -18,6 +19,9 @@ public class TestEnvironmentProvider
 {
     @Inject
     IVoiceRecognition mVoiceRecognition;
+
+    @Inject
+    LocationSystem mLocationSystem;
 
     private static TestEnvironmentProvider instance;
 
@@ -44,8 +48,14 @@ public class TestEnvironmentProvider
     public void setup()
     {
         doReturn(true).when(mVoiceRecognition).isMock();
+        doReturn(true).when(mLocationSystem).isMock();
+
+        doReturn(true).when(mLocationSystem).isFindLocation();
+
         doCallRealMethod().when(mVoiceRecognition).start();
         doCallRealMethod().when(mVoiceRecognition).postEvent();
+        doCallRealMethod().when(mLocationSystem).start();
+        doCallRealMethod().when(mLocationSystem).postEvent();
     }
 
     public IVoiceRecognition getMockedVoiceRecognition()
