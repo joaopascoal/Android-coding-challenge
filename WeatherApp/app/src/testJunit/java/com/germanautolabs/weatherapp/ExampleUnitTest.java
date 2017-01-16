@@ -28,8 +28,8 @@ public class ExampleUnitTest
         mTestEnvironmentProvider = TestEnvironmentProvider.getInstance();
 
         mKeywordSystem = new KeywordSystem();
-        mKeywordSystem.addFilter("weather", new OpenWeatherMap_Description());
-        mKeywordSystem.addFilter("temperature", new OpenWeatherMap_Temperature());
+        mKeywordSystem.addFilter("weather", KeywordSystem.FilterType.WEATHER, new OpenWeatherMap_Description());
+        mKeywordSystem.addFilter("temperature", KeywordSystem.FilterType.TEMPERATURE, new OpenWeatherMap_Temperature());
     }
 
     @Test

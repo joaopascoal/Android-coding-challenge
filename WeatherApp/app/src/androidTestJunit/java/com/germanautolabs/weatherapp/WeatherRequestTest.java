@@ -68,7 +68,7 @@ public class WeatherRequestTest extends ActivityInstrumentationTestCase2<MainAct
 
         // Test
         onView(withId(R.id.voice_btn)).perform(click());
-        onView(withId(R.id.hello_txt)).check(matches(withText(results.get(0))));
+        onView(withId(R.id.requested_info_txt)).check(matches(withText(results.get(0))));
     }
 
     @Override
