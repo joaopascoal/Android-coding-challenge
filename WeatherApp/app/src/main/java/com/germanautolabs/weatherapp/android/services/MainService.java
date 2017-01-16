@@ -92,8 +92,16 @@ public class MainService extends Service
     @Subscribe
     public void onVoiceRecognitionSuccess(DefaultVoiceRecognition.Event pEvent)
     {
-        List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData());
-        this.mEventBus.post(new Event(filteredData, this.mKeywordSystem.getLastFilterAccessed()));
+        if (pEvent.getErrorCode() == 0)
+        {
+            List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData());
+            this.mEventBus.post(new Event(filteredData, this.mKeywordSystem.getLastFilterAccessed()));
+        }
+        else
+        {
+            // TODO: Send error code to activity and apply treatment.
+        }
+
     }
 
     @Subscribe

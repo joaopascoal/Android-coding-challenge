@@ -132,6 +132,9 @@ public class DefaultVoiceRecognition implements IVoiceRecognition, RecognitionLi
     public void onError(int error)
     {
         // TODO: Post event to dispatch error to activity
+        this.stop();
+        this.mWordsSpoken.clear();
+        EventBus.getDefault().post(new Event(error));
     }
 
     @Override
