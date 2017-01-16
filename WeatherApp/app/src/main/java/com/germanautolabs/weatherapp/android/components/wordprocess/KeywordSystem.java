@@ -15,7 +15,8 @@ public class KeywordSystem
     public enum FilterType
     {
         WEATHER,
-        TEMPERATURE
+        TEMPERATURE,
+        WIND
     }
 
     private HashMap<String, IWeatherDataFilter> mKeywordTable;

@@ -8,6 +8,7 @@ import com.germanautolabs.weatherapp.android.components.voice.IVoiceRecognition;
 import com.germanautolabs.weatherapp.android.components.wordprocess.KeywordSystem;
 import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Description;
 import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Temperature;
+import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Wind;
 import com.germanautolabs.weatherapp.android.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +60,7 @@ public class AppModule
         KeywordSystem keywordSystem = new KeywordSystem();
         keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_weather), KeywordSystem.FilterType.WEATHER, new OpenWeatherMap_Description());
         keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_temperature), KeywordSystem.FilterType.TEMPERATURE, new OpenWeatherMap_Temperature());
+        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_wind), KeywordSystem.FilterType.WIND, new OpenWeatherMap_Wind());
 
         return keywordSystem;
     }

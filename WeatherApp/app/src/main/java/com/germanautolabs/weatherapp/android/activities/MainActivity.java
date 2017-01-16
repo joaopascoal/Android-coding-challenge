@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         if (pEvent.getFilterType() == null || dataList.size() == 0)
         {
             mRequestedInfo.setText(getBaseContext().getString(R.string.label_data_not_found));
+            return;
         }
 
         String info = dataList.get(0);
@@ -116,6 +117,10 @@ public class MainActivity extends AppCompatActivity
 
             case TEMPERATURE:
                 mRequestedInfo.setText(info + "ºC");
+                break;
+
+            case WIND:
+                mRequestedInfo.setText(info + " km/h");
                 break;
         }
     }

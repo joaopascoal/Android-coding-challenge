@@ -3,6 +3,7 @@
 
     <string name="filter_weather">weather</string>
     <string name="filter_temperature">temperature</string>
+    <string name="filter_wind">wind</string>
 
     <string name="label_greetings">Hello! Welcome to WeatherApp!</string>
     <string name="label_location">Searching your location...</string>

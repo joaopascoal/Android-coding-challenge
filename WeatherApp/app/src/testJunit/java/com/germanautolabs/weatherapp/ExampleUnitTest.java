@@ -3,6 +3,7 @@ package com.germanautolabs.weatherapp;
 import com.germanautolabs.weatherapp.android.components.wordprocess.KeywordSystem;
 import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Description;
 import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Temperature;
+import com.germanautolabs.weatherapp.android.components.wordprocess.filters.OpenWeatherMap_Wind;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +28,11 @@ public class ExampleUnitTest
     {
         mTestEnvironmentProvider = TestEnvironmentProvider.getInstance();
 
+        // TODO: Give support to unit test multi-language. At the moment, it only works in english
         mKeywordSystem = new KeywordSystem();
         mKeywordSystem.addFilter("weather", KeywordSystem.FilterType.WEATHER, new OpenWeatherMap_Description());
         mKeywordSystem.addFilter("temperature", KeywordSystem.FilterType.TEMPERATURE, new OpenWeatherMap_Temperature());
+        mKeywordSystem.addFilter("wind", KeywordSystem.FilterType.WIND, new OpenWeatherMap_Wind());
     }
 
     @Test
@@ -64,6 +67,24 @@ public class ExampleUnitTest
         List<String> resultList = mKeywordSystem.getData(wordsRecognized, json);
 
         OpenWeatherMap_Temperature filter = new OpenWeatherMap_Temperature();
+        List<String> filterResults = filter.processData(json);
+
+        assertEquals(1, resultList.size());
+        assertEquals(filterResults.get(0), resultList.get(0));
+    }
+
+    @Test
+    public void filter_wind_isCorrect() throws Exception
+    {
+        ArrayList<String> wordsRecognized = new ArrayList<>();
+        wordsRecognized.add("finn");
+        wordsRecognized.add("wind");
+
+        // Mock call to OpenWeatherAPI
+        String json = mTestEnvironmentProvider.jsonFromAssetForJunit("weatherMockData.json");
+        List<String> resultList = mKeywordSystem.getData(wordsRecognized, json);
+
+        OpenWeatherMap_Wind filter = new OpenWeatherMap_Wind();
         List<String> filterResults = filter.processData(json);
 
         assertEquals(1, resultList.size());
