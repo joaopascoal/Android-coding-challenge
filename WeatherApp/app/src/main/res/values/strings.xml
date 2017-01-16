@@ -7,4 +7,5 @@
     <string name="label_greetings">Hello! Welcome to WeatherApp!</string>
     <string name="label_location">Searching your location...</string>
     <string name="label_you_are">You are in</string>
+    <string name="label_data_not_found">Data not found. Try again.</string>
 </resources>

@@ -57,8 +57,8 @@ public class AppModule
     public KeywordSystem provideKeywordSystem()
     {
         KeywordSystem keywordSystem = new KeywordSystem();
-        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_weather), new OpenWeatherMap_Description());
-        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_temperature), new OpenWeatherMap_Temperature());
+        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_weather), KeywordSystem.FilterType.WEATHER, new OpenWeatherMap_Description());
+        keywordSystem.addFilter(StringUtils.getString(WeatherApp.getAppContext(), R.string.filter_temperature), KeywordSystem.FilterType.TEMPERATURE, new OpenWeatherMap_Temperature());
 
         return keywordSystem;
     }

@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.location_txt)
     TextView mLocation;
 
+    @BindView(R.id.requested_info_txt)
+    TextView mRequestedInfo;
+
     @BindView(R.id.voice_btn)
     Button mVoiceBtn;
 
@@ -85,22 +88,34 @@ public class MainActivity extends AppCompatActivity
         switch (pEvent.getType())
         {
             case VOICE_RECOGNITION:
-                List<String> dataList = pEvent.getDataList();
-
-                if (dataList.size() > 0)
-                {
-                    String description = dataList.get(0);
-                    mHello.setText(description);
-                }
-                else
-                {
-                    mHello.setText("Fail!");
-                }
+                this.processDataByFilter(pEvent);
                 break;
 
             case LOCATION_FOUND:
                 this.setLocationText();
+                this.setRequestInfoIntro();
                 mVoiceBtn.setEnabled(true);
+                break;
+        }
+    }
+
+    private void processDataByFilter(MainService.Event pEvent)
+    {
+        List<String> dataList = pEvent.getDataList();
+        if (pEvent.getFilterType() == null || dataList.size() == 0)
+        {
+            mRequestedInfo.setText(getBaseContext().getString(R.string.label_data_not_found));
+        }
+
+        String info = dataList.get(0);
+        switch (pEvent.getFilterType())
+        {
+            case WEATHER:
+                mRequestedInfo.setText(info);
+                break;
+
+            case TEMPERATURE:
+                mRequestedInfo.setText(info + "ºC");
                 break;
         }
     }
@@ -108,6 +123,11 @@ public class MainActivity extends AppCompatActivity
     private void setLocationText()
     {
         mLocation.setText(getBaseContext().getString(R.string.label_you_are) + " " + mLocationSystem.getCity() + ", " + mLocationSystem.getCountryName());
+    }
+
+    private void setRequestInfoIntro()
+    {
+        mRequestedInfo.setText("Press 'voice' button and ask WeatherApp the data you want");
     }
 
     /**

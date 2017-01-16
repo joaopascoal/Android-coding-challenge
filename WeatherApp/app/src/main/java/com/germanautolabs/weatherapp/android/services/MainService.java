@@ -93,7 +93,7 @@ public class MainService extends Service
     public void onVoiceRecognitionSuccess(DefaultVoiceRecognition.Event pEvent)
     {
         List<String> filteredData = this.mKeywordSystem.getData(pEvent.getWordList(), this.mLocationSystem.getWeatherData());
-        this.mEventBus.post(new Event(filteredData));
+        this.mEventBus.post(new Event(filteredData, this.mKeywordSystem.getLastFilterAccessed()));
     }
 
     @Subscribe
@@ -126,10 +126,12 @@ public class MainService extends Service
     {
         private EventType mType;
         private List<String> mDataList;
+        private KeywordSystem.FilterType mFilterType;
 
-        public Event(List<String> pDataList)
+        public Event(List<String> pDataList, KeywordSystem.FilterType pFilterType)
         {
             this.mDataList = pDataList;
+            this.mFilterType = pFilterType;
             this.mType = EventType.VOICE_RECOGNITION;
         }
 
@@ -146,6 +148,11 @@ public class MainService extends Service
         public List<String> getDataList()
         {
             return this.mDataList;
+        }
+
+        public KeywordSystem.FilterType getFilterType()
+        {
+            return this.mFilterType;
         }
     }
 }

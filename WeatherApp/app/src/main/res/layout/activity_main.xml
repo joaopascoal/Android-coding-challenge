@@ -27,6 +27,15 @@
         android:layout_marginTop="22dp"
         android:id="@+id/location_txt"/>
 
+    <TextView
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:id="@+id/requested_info_txt"/>
+
     <Button
         android:text="Voice"
         android:enabled="false"
