@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setRequestInfoIntro()
     {
+        // TODO: Add this string to string.xml and translated them
         mRequestedInfo.setText("Press 'voice' button and ask WeatherApp the data you want");
     }
 
